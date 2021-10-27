@@ -8,5 +8,8 @@ Using this repository, you can test and train the model.
 
 # Hyperparameter Tuning
 
+<img src="figures/decision_bound_fa_convergence.eps">
+<img src="figures/ROCs.eps">
+
 Thanks!
 Basarbatu Can
