@@ -7,9 +7,8 @@ Using this repository, you can test and train the model.
 # Running the Model with a new data set
 
 # Hyperparameter Tuning
-
-<img src="figures/decision_bound_fa_convergence.eps">
-<img src="figures/ROCs.eps">
+|![alt text](figures/decision_bound_fa_convergence.eps)|
+|:--:| 
 
 Thanks!
 Basarbatu Can
