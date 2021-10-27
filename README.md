@@ -36,7 +36,7 @@ In order to run the full pipeline with a new dataset
 
 # Expected Decision Boundaries
 When input data is 2D, it is possible to visualize decision boundaries. I included decision boundaries for banana dataset for different target false alarms. Below figure was collected from [1].
-<img src="figures/decision_bound_fa_convergence.png">
+<img src="figures/decision_bound_fa_convergence.png" weight=150 height=100>
 
 Thanks!
 Basarbatu Can
