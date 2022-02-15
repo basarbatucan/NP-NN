@@ -64,7 +64,7 @@ classdef utility_functions
         end
         
         % plot_decision_boundaries
-        function plot_decision_boundary(alpha, D, w, b, x, y)
+        function plot_decision_boundary(model, x, y)
             
             figure();
             
@@ -85,10 +85,7 @@ classdef utility_functions
             for i=1:numPtsInGrid
                 for j=1:numPtsInGrid
                     xt = [X1(i,j), X2(i,j)];
-                    xt_r_tmp = xt*alpha;
-                    xt_projected_tmp = (1/sqrt(D))*[cos(xt_r_tmp), sin(xt_r_tmp)];
-                    y_discriminant_tmp = xt_projected_tmp*w+b;
-                    yt_predict = sign(y_discriminant_tmp);
+                    yt_predict = model.predict(xt);
                     if yt_predict==0
                         yt_predict=-1;
                     end
@@ -103,12 +100,9 @@ classdef utility_functions
             y_pred = zeros(length(y_), 1);
             for i=1:length(y_)
                 xt=x_(i,:);
-                xt_r_tmp = xt*alpha;
-                xt_projected_tmp = (1/sqrt(D))*[cos(xt_r_tmp), sin(xt_r_tmp)];
-                y_discriminant_tmp = xt_projected_tmp*w+b;
-                y_pred(i) = sign(y_discriminant_tmp);
+                y_pred(i) = model.predict(xt);
             end
-            
+
             y_label = cell(length(y_),1);
             y_label(y_<0) = {'Class -1'};
             y_label(y_>0) = {'Class 1'};

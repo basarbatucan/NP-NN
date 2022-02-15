@@ -9,7 +9,7 @@ augmentation_size = 150e3;
 test_repeat = 100;
 
 % Define model parameters
-tfpr = 0.1;
+tfpr = 0.05;
 eta_init = 0.01;                          % perceptron learning rate
 beta_init = 100;                          % class weight initial learning rate
 gamma = 1;
@@ -244,3 +244,8 @@ subplot(2,2,4)
 plot(fpr_test_array, 'LineWidth', 2);grid on;
 xlabel('Number of Tests');
 ylabel('Test FPR');
+
+% plot the decision boundaries when 2D
+if n_features == 2
+    utility_functions.plot_decision_boundary(alpha, D, w, b, X_test, y_test);
+end
