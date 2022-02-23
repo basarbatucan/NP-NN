@@ -9,7 +9,7 @@ test_size = 0.15;
 augmentation_size = 150e3;
 test_repeat = 100;
 cross_val_MC = 8;
-tfpr = 0.05;
+tfpr = 0.2;
 
 % Define model hyper-parameter space
 hyperparams.eta_init = 0.01;

@@ -31,13 +31,14 @@ model at different stages of the training. Please refer to the paper for more de
 # Running the Model with a new data set
 In order to run the full pipeline with a new dataset
 * Make sure downloaded data has the same fields with ./data/banana.mat
-* Note that ./data/banana.mat is not normalized. Any additional preprocess should be implemented.
 * Make sure the downloaded data is located under the data folder.
 * Update the pipeline parameter showing the directory for the input data
+* Include additional hyperparameters for better performance
 
 # Expected Decision Boundaries
-When input data is 2D, it is possible to visualize decision boundaries. I included decision boundaries for banana dataset for different target false alarms. Below figure was collected from [1].
-<img src="figures/decision_bound_fa_convergence.png">
+When input data is 2D, it is possible to visualize decision boundaries. I included 2 decision boundaries for target false alarms 0.05 and 0.2.<br/>
+<img src="figures/db_005.png">
+<img src="figures/db_020.png">
 
 Thanks!
 Basarbatu Can
