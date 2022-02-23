@@ -1,7 +1,8 @@
 # A Neural Network Approach for Online Nonlinear Neyman-Pearson Classification
 This is the repository for Online Nonlinear Neyman Pearson (NP) Classifier described in [1]: https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9265182. 
 Proposed model is an online, nonlinear NP classifier. In NP framework, the target is to maximize detection power while upper-bounding the false alarm.
-Using this repository, you can test and train the model. Note that available code does not cover hyper-parameter tuning.
+Using this repository, you can test and train the model. This implementation contains hyper-parameter tuning but note that hyper-parameter spaces should be defined by the user.
+Refer to [1] for detailed explanation of the hyper-parameters.
 
 
 # Running the Model
@@ -13,8 +14,8 @@ Last parameter is related to the augmentation size. For datasets that has less n
 With the augmentation size, user can define a lower limit and any dataset that has less number of samples from the target will be augmented.
 
 # Model Parameters
-Existing model parameters are selected for banana data set under ./data/. For other datasets, model parameters should be tuned. 
-It is important to note that this code does not contain hyper-parameter tuning.
+Existing hyper-parameter spaces are created for banana data set under ./data/. Note that they are not optimized. For performance increase, you can include additional parameters.
+It is also important to note that in [1], hyper-parameter D is defined is multiplication of a constant with the dimension number of the dataset, whereas in this implementation, defined D is not multiplied by any value and directly used in Random Fourier Features generation [2].
 
 # Evaluating and Using the results
 Running the model will generate 4 different graphs. 
@@ -42,4 +43,5 @@ Thanks!
 Basarbatu Can
 
 # References
-[1] Can, Basarbatu, and Huseyin Ozkan. "A Neural Network Approach for Online Nonlinear Neyman-Pearson Classification." IEEE Access 8 (2020): 210234-210250.
+[1] Can, Basarbatu, and Huseyin Ozkan. "A Neural Network Approach for Online Nonlinear Neyman-Pearson Classification." IEEE Access 8 (2020): 210234-210250. <br>
+[2] Rahimi, Ali, and Benjamin Recht. "Random features for large-scale kernel machines." Advances in neural information processing systems 20 (2007).
