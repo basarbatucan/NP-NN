@@ -25,6 +25,8 @@ classdef NPNN
         fpr_train_array_
         tpr_test_array_
         fpr_test_array_
+        neg_class_weight_train_array_
+        pos_class_weight_train_array_
         
     end
     
@@ -256,6 +258,8 @@ classdef NPNN
             obj.fpr_train_array_ = fpr_train_array;
             obj.tpr_test_array_ = tpr_test_array;
             obj.fpr_test_array_ = fpr_test_array;
+            obj.neg_class_weight_train_array_ = neg_class_weight_train_array;
+            obj.pos_class_weight_train_array_ = pos_class_weight_train_array;
             
         end
         
