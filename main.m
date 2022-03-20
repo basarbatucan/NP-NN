@@ -2,10 +2,20 @@ close
 clear
 clc
 
-tfprs = [5e-2];
-tfpr_index = 1;
+% only look at first 5 for other analysis
+tfprs = [5e-3, 1e-2, 5e-2, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
+tfpr_index = 5;
 MC = 16;
+
+%data_name = 'avila';
 data_name = 'banana';
+%data_name = 'covertype';
+%data_name = 'fourclass';
+%data_name = 'miniboone_pid';
+%data_name = 'phishing';
+%data_name = 'satellite';
+%data_name = 'telescope';
+
 out_data = sprintf('./output/%s/res_%03d.mat', data_name, tfpr_index);
 out_hyper = sprintf('./output/%s/res_hyper_%03d.mat', data_name, tfpr_index);
 
@@ -41,6 +51,7 @@ hyper_params = load(out_hyper);
 test_repeat = 100;
 
 % run MCs
+test_tstart = tic;
 parfor i=1:MC
     % run the model
     model = single_experiment(tfpr, data_name, test_repeat, hyper_params);
@@ -52,6 +63,8 @@ parfor i=1:MC
     tpr_test_array_all{i} = model.tpr_test_array_;
     fpr_test_array_all{i} = model.fpr_test_array_;
 end
+test_tend = toc(test_tstart);
+fprintf('Time elapsed for testing with %d test_repeat: %.3f\n', test_repeat, test_tend);
 
 save(sprintf('./output/%s/res_%03d',data_name, tfpr_index),...
     'tpr_train_array_all',...
@@ -64,4 +77,4 @@ save(sprintf('./output/%s/res_%03d',data_name, tfpr_index),...
 % run 1 last time for for generating the output figures
 % note that the results generated at this point is not saved, this is only
 % for generating decision boundaries and transient outputs
-model = single_experiment(tfpr, data_name, test_repeat, hyper_params);
+%model = single_experiment(tfpr, data_name, test_repeat, hyper_params);
