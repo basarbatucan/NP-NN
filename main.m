@@ -4,8 +4,9 @@ clc
 
 % only look at first 5 for other analysis
 tfprs = [5e-3, 1e-2, 5e-2, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
-tfpr_index = 5;
+tfpr_index = 4;
 MC = 16;
+forced_parameter_tuning_flag = 1;
 
 %data_name = 'avila';
 data_name = 'banana';
@@ -28,7 +29,8 @@ fpr_test_array_all = cell(1, MC);
 
 % cross validation part
 tfpr = tfprs(tfpr_index);
-if ~isfile(out_hyper)
+if (~isfile(out_hyper)) || (forced_parameter_tuning_flag == 1)
+    disp('Running parameter tuning...');
     % no hyperparameters available, run
     test_repeat = 1;
     model = single_experiment(tfpr, data_name, test_repeat, []);
@@ -43,16 +45,24 @@ if ~isfile(out_hyper)
     % save hyper-parameters
     save(out_hyper, 'eta_init', 'beta_init', 'gamma', 'sigmoid_h', 'lambda', 'D', 'g');
 end
-   
 
 % hyperparameter is available
 hyper_params = load(out_hyper);
 % run the model with hyperparams
-test_repeat = 100;
+test_repeat = 20;
+
+% test tun with the selected parameters
+% comment this part in order to ignore one additional
+disp('Starting single run...');
+t_start = tic;
+model = single_experiment(tfpr, data_name, test_repeat, hyper_params);
+t_end = toc(t_start);
+disp(['test run completed in ',num2str(t_end)]);
+pause;
 
 % run MCs
 test_tstart = tic;
-parfor i=1:MC
+for i=1:MC
     % run the model
     model = single_experiment(tfpr, data_name, test_repeat, hyper_params);
     % save the results
@@ -77,4 +87,4 @@ save(sprintf('./output/%s/res_%03d',data_name, tfpr_index),...
 % run 1 last time for for generating the output figures
 % note that the results generated at this point is not saved, this is only
 % for generating decision boundaries and transient outputs
-%model = single_experiment(tfpr, data_name, test_repeat, hyper_params);
+model = single_experiment(tfpr, data_name, test_repeat, hyper_params);

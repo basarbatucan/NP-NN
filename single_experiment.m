@@ -6,7 +6,7 @@ function model = single_experiment(tfpr, data_name, test_repeat, optimized_param
 	test_size = 0.15;
 	augmentation_size = 150e3;
 	cross_val_MC = 8;
-
+    
     % Read Data
     data = load(input_data_dir);
     [X_train, X_val, X_test, y_train, y_val, y_test] = utility_functions.train_val_test_split(data.x, data.y, val_size, test_size);
@@ -143,7 +143,7 @@ function model = single_experiment(tfpr, data_name, test_repeat, optimized_param
 
         % plot decision boundaries
         if n_features == 2
-            %utility_functions.plot_decision_boundary(model, X_test, y_test)
+            utility_functions.plot_decision_boundary(model, X_test, y_test)
         end
     end
 end
