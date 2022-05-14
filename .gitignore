@@ -4,5 +4,5 @@ data/*
 
 !output/
 output/*
-!output/banana
+!output/banana/
 output/banana/*

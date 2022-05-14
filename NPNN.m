@@ -27,6 +27,7 @@ classdef NPNN
         fpr_test_array_
         neg_class_weight_train_array_
         pos_class_weight_train_array_
+        test_indices_
         
     end
     
@@ -87,8 +88,8 @@ classdef NPNN
             % init accumulators
             tp = 0;
             fp = 0;
-            test_i = linspace(1, n_samples_train, test_repeat+1);
-            test_i=round(test_i(2:end));
+            test_i = logspace(1, log10(n_samples_train), test_repeat+1);
+            test_i = round(test_i(2:end));
             current_test_i = 1;
 
             % array outputs
@@ -260,6 +261,7 @@ classdef NPNN
             obj.fpr_test_array_ = fpr_test_array;
             obj.neg_class_weight_train_array_ = neg_class_weight_train_array;
             obj.pos_class_weight_train_array_ = pos_class_weight_train_array;
+            obj.test_indices_ = test_i;
             
         end
         

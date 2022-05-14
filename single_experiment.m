@@ -13,13 +13,13 @@ function model = single_experiment(tfpr, data_name, test_repeat, optimized_param
     n_features = size(X_train, 2);
     
     % Define model hyper-parameter space
-    hyperparams.eta_init = 0.01;
-    hyperparams.beta_init = [1e2, 1e3];
+    hyperparams.eta_init = [0.01];
+    hyperparams.beta_init = [500];
     hyperparams.gamma = 1;
     hyperparams.sigmoid_h = -1;
-    hyperparams.lambda = 0;
-    hyperparams.D = [1, 2, 5, 10]*n_features;
-    hyperparams.g = [0.01, 1, 5, 10]/n_features;
+    hyperparams.lambda = [1e-7];
+    hyperparams.D = [2]*n_features;
+    hyperparams.g = [2]/n_features;
 
     % generate hyper-parameter space 
     hyperparam_space = utility_functions.generate_hyperparameter_space_NPNN(hyperparams);

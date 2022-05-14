@@ -49,6 +49,8 @@ classdef utility_functions
                     augmented_x(start_i:end_i, :) = x(shuffle_i, :);
                     augmented_y(start_i:end_i, :) = y(shuffle_i, :);
                 end
+                augmented_x = augmented_x(1:augmentation_size,:);
+                augmented_y = augmented_y(1:augmentation_size);
             else
                 % no concat
                 augmented_x = x;
@@ -133,8 +135,8 @@ classdef utility_functions
             % plot the decision boundary
             % plot the main data
             gscatter(x_(:,1),x_(:,2),y_label, 'brg', 'xo*');
-            xlabel('X_1');
-            ylabel('X_2');
+%             xlabel('X_1');
+%             ylabel('X_2');
             grid on
             hold on
 
