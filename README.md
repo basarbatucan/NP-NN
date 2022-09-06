@@ -2,47 +2,53 @@
 This is the repository for Online Nonlinear Neyman Pearson (NP) Classifier described in [1]: https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9265182. 
 Proposed model is an online, nonlinear NP classifier. In NP framework, the target is to maximize detection power while upper-bounding the false alarm.
 
-# Running the Code
-* "main.m" is the main function for running OLNP.
-* NP-NN is an NP classifier therefore it is optimized for a selected false alarm rate.
-* List of different false alarms are given in "main.m". User can select any of these false alarms as target false alarm by changing the target false alarm index.
-* Once the code execution is completed, training and testing phases related graphs are generated.
-* Selected hyperparameters and generated outputs are saved under output directory.
-* Note that there should be additional folder with the same name as your input data file for saving the output. (e.g ./data/banana.mat, ./output/banana.mat)
+# NPNN parameters
+    tfpr_=0.1                #target false alarm
+    eta_init_=0.01           # initial learning rate for perceptron
+    beta_init_=100           # initial learning rate for class weights, this is scaled by 1/total_number_of_negative_samples in code for better convergence
+    sigmoid_h_=-1            # sigmoid function parameter
+    Lambda_=0                # regularization parameter
+    D_=2                     # number of fourier features (higher dimensional space will have 2*D dimensions, it is better to have D>input dimension for good performance)
+    g_=0.1                   # bandwidth of RBF kernel
 
-# Hyperparameter Tuning
-* "single_experiment.m" file optimizes model for a given set of hyperparameters and single target false alarm.
-* Hyperparameter space is defined in "single_experiment.m", user can increase the number of parameters for better tuning.
-* Refer to [1] for detailed explanation of the hyperparameters.
-* If the model is already optimized (optimum parameters are saved and available under output folder), model will not tune its parameters and continue on testing.
+# Example Usage
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import confusion_matrix
+    from sklearn.preprocessing import StandardScaler
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from npnn import npnn
 
-# Repetitive Results
-* NP-NN is an online algorithm. Performance of the model is affected by the streaming order of the data. Therefore, in order to show significance of our experiements, we repeat them MC times.
-* MC is available in the main function and stands for Monte Carlo repetition.
-* The latest run in the main function does not contribute to the saved results. That computation is only for generating the graphs.
+    data = pd.read_csv('./data/banana.csv')
+    X = data.iloc[:,:-1].values
+    y = data.iloc[:,-1].values
+    
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+    
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform (X_test)
+    
+    NPNN = npnn(D_=15, g_=1, tfpr_=0.1)
+    
+    NPNN.fit(X_train, y_train)
+    
+    y_pred = NPNN.predict(X_test)
+    
+    tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
+    FPR = fp/(fp+tn)
+    TPR = tp/(tp+fn)
+    print("NPNN, TPR: {:.3f}, FPR: {:.3f}".format(TPR, FPR))
 
-# Evaluating and Using the results
-* Last stand alone single_experiment.m run in main.m is to generate output figures.
-* There are 4 different graphs.
-* These graphs correspond to transient behaviour of the model during training.
-* Graphs of the 4 different arrays are shown below.
-<img src="figures/code_output.png">
-
-Top and bottom figures are related to train and test, respectively. The number of samples in training is related to the augmentation (explained in model parameters). 
-In current case, the number of training samples is ~150k. Similarly, for test figures, there are 100 data points, where each point is an individual test of the existing 
-model at different stages of the training. Please refer to the paper for more detailed explanation.
-
-# Running the Model with a new data set
-* Make sure downloaded data has the same fields with ./data/banana.mat
-* Make sure the downloaded data is located under the data folder.
-* Update the pipeline parameter showing the directory for the input data
-* Include additional hyperparameters for better performance
-* Create corresponding folder under output/.
+# Learning Performance
+* Below graph visualizes how TPR, FPR and corresponding class weights are being updated during training.
+* Note that NPNN augments data to 150k samples (shuffle + concatenation) for better convergence.
+<img src="figures/transient_performances.png">
 
 # Expected Decision Boundaries
-When input data is 2D, it is possible to visualize decision boundaries. I included 2 decision boundaries for target false alarms 0.05 and 0.2.<br/>
-<img src="figures/db_005.png">
-<img src="figures/db_020.png">
+Visualization of decision boundaries for 2D dataset.<br/>
+<img src="figures/decision_boundary_visualized.png">
 
 Thanks!
 Basarbatu Can
