@@ -1,9 +1,9 @@
 # A Neural Network Approach for Online Nonlinear Neyman-Pearson Classification
-This is the repository for Online Nonlinear Neyman Pearson (NP) Classifier described in [1]: https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9265182. 
+This is the repository for Online Nonlinear Neyman Pearson (NP) Classifier described in [1]: https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9265182. <br/>
 Proposed model is an online, nonlinear NP classifier. In NP framework, the target is to maximize detection power while upper-bounding the false alarm.
 
 # NPNN parameters
-    tfpr_=0.1                #target false alarm
+    tfpr_=0.1                # target false alarm
     eta_init_=0.01           # initial learning rate for perceptron
     beta_init_=100           # initial learning rate for class weights, this is scaled by 1/total_number_of_negative_samples in code for better convergence
     sigmoid_h_=-1            # sigmoid function parameter
@@ -32,7 +32,7 @@ Proposed model is an online, nonlinear NP classifier. In NP framework, the targe
     
     NPNN = npnn(D_=15, g_=1, tfpr_=0.1)
     
-    NPNN.fit(X_train, y_train)
+    NPNN.fit(X_train, y_train) # Augmentation sample number is an input parameter in fit function. Default value = 150e3
     
     y_pred = NPNN.predict(X_test)
     
@@ -50,8 +50,8 @@ Proposed model is an online, nonlinear NP classifier. In NP framework, the targe
 Visualization of decision boundaries for 2D dataset.<br/>
 <img src="figures/decision_boundary_visualized.png">
 
-Thanks!
-Basarbatu Can
+Thanks!<br/>
+Basarbatu Can, PhD
 
 # References
 [1] Can, Basarbatu, and Huseyin Ozkan. "A Neural Network Approach for Online Nonlinear Neyman-Pearson Classification." IEEE Access 8 (2020): 210234-210250.
