@@ -240,7 +240,8 @@ class npnn:
         y_ = np.empty((n_samples_augmented))
         for i in range(0, n_augmentation_call):
             # shuffle index
-            shuffle_index = np.random.shuffle(np.arange(n_samples))
+            shuffle_index = np.arange(n_samples)
+            np.random.shuffle(shuffle_index)
             # create augmented data
             X_[i*n_samples:(i+1)*n_samples, :] = X[shuffle_index, :]
             y_[i*n_samples:(i+1)*n_samples] = y[shuffle_index]
