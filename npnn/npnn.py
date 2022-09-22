@@ -253,10 +253,12 @@ class npnn:
     def get_params(self, deep=True):
 
         params = dict()
+        params['eta_init'] = self.eta_init
+        params['beta_init'] = self.beta_init
+        params['sigmoid_h'] = self.sigmoid_h
+        params['Lambda'] = self.Lambda
         params['D'] = self.D
         params['g'] = self.g
-        params['eta_init'] = self.eta_init
-        params['Lambda'] = self.Lambda
         
         return params
 

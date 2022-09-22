@@ -7,6 +7,11 @@ import numpy as np
 
 from npnn import npnn
 
+# Target False Alarm
+# NP framework aims to maximize the detection power while upper bounding the false alarm rate
+# target false alarm rate should be determined by the user
+target_FPR = 0.1
+
 # main 
 # np-nn works for 1,-1 classification
 # we expect data to be in tabular form with the latest column as target (check ./data/banana.csv)
@@ -24,13 +29,16 @@ X_test = sc.transform (X_test)
 
 # define hyperparameters
 parameters = {
-    'D':[2, 4], 
-    'g':[0.1, 1],
-    'Lambda':[0, 1e-4]
+    'eta_init': [0.01],               # default, 0.01
+    'beta_init': [100],               # default, 100
+    'sigmoid_h': [-1, -2],            # default, -1
+    'Lambda':[0, 1e-4],               # default, 0
+    'D':[2, 4],                       # default, 2
+    'g':[0.1, 1]                      # default, 1
     }
 
 # define classifier
-NPNN = npnn(tfpr=0.1)
+NPNN = npnn(tfpr=target_FPR)
 
 # hyperparameter tuning
 clf = GridSearchCV(NPNN, parameters, verbose=3, cv=2, n_jobs=-1)
