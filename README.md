@@ -3,13 +3,13 @@ This is the repository for Online Nonlinear Neyman Pearson (NP) Classifier descr
 Proposed model is an online, nonlinear NP classifier. In NP framework, the target is to maximize detection power while upper-bounding the false alarm. Implemented model is compatible with sklearn's gridsearchcv function. It can be used for fine tuning. You can find example usage below. 
 
 # NPNN parameters
-    tfpr_=0.1                # target false alarm
-    eta_init_=0.01           # initial learning rate for perceptron
-    beta_init_=100           # initial learning rate for class weights, this is scaled by 1/total_number_of_negative_samples in code for better convergence
-    sigmoid_h_=-1            # sigmoid function parameter
-    Lambda_=0                # regularization parameter
-    D_=2                     # number of fourier features (higher dimensional space will have 2*D dimensions, it is better to have D>input dimension for good performance)
-    g_=0.1                   # bandwidth of RBF kernel
+    tfpr = 0.1                # target false alarm
+    eta_init = 0.01           # initial learning rate for perceptron
+    beta_init = 100           # initial learning rate for class weights, this is scaled by 1/total_number_of_negative_samples in code for better convergence
+    sigmoid_h = -1            # sigmoid function parameter
+    Lambda = 0                # regularization parameter
+    D = 2                     # number of fourier features (higher dimensional space will have 2*D dimensions, it is better to have D>input dimension for good performance)
+    g = 0.1                   # bandwidth of RBF kernel
 
 # Example Usage
     import pandas as pd
