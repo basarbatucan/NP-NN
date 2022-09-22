@@ -8,19 +8,20 @@ __status__ = "Dev"
 
 import numpy as np
 import warnings
+from sklearn.metrics import confusion_matrix
 
 class npnn:
 
-    def __init__(self, tfpr_=0.1, eta_init_=0.01, beta_init_=100, sigmoid_h_=-1, Lambda_=0, D_=2, g_=0.1):
+    def __init__(self, tfpr=0.1, eta_init=0.01, beta_init=100, sigmoid_h=-1, Lambda=0, D=2, g=0.1):
 
         # hyperparameters
-        self.tfpr = tfpr_
-        self.eta_init = eta_init_
-        self.beta_init = beta_init_
-        self.sigmoid_h = sigmoid_h_
-        self.Lambda = Lambda_
-        self.D = D_
-        self.g = g_
+        self.tfpr = tfpr
+        self.eta_init = eta_init
+        self.beta_init = beta_init
+        self.sigmoid_h = sigmoid_h
+        self.Lambda = Lambda
+        self.D = D
+        self.g = g
     
         # parameters (these features are assigned after training is completed)
         self.w_ = None # perceptron weight
@@ -33,7 +34,8 @@ class npnn:
         self.neg_class_weight_train_array_ = None # learned weight for negative class (note that we assume binary classes are 1 and -1)
         self.pos_class_weight_train_array_ = None # learned weight for positive class
 
-    def fit(self, X, y, n_samples_augmented_min=150e3):
+    #def fit(self, X, y, n_samples_augmented_min=150e3):
+    def fit(self, X, y, **fit_params):
 
         # take the parameters
         tfpr = self.tfpr
@@ -44,6 +46,9 @@ class npnn:
         Lambda = self.Lambda
         D = self.D
         g = self.g
+
+        # constants
+        n_samples_augmented_min = 150000
 
         # prepare the X
         # note that since this is an online algorithm, to have better conversion, we augment initial data
@@ -231,6 +236,36 @@ class npnn:
             y_predict[i] = np.sign(y_discriminant)[0,0]
 
         return y_predict
+
+    def score(self, X, y):
+        
+        y_pred = self.predict(X)
+        tn, fp, fn, tp = confusion_matrix(y, y_pred).ravel()
+        FPR = fp/(fp+tn)
+        TPR = tp/(tp+fn)
+        TFPR = self.tfpr
+        np_score = max(FPR, TFPR)/TFPR - TPR
+        # since less np_score is better, take negative of the score
+        np_score = -np_score
+
+        return np_score
+
+    def get_params(self, deep=True):
+
+        params = dict()
+        params['D'] = self.D
+        params['g'] = self.g
+        params['eta_init'] = self.eta_init
+        params['Lambda'] = self.Lambda
+        
+        return params
+
+    def set_params(self, **params):
+
+        for key, val in params.items():
+            setattr(self, key, val)
+
+        return self
 
     # aux functions
     def __augment_data(self, X, y, n_samples, n_features, n_samples_augmented_min):

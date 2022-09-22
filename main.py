@@ -23,17 +23,29 @@ X_train = sc.fit_transform(X_train)
 X_test = sc.transform (X_test)
 
 # define hyperparameters
-parameters = {'kernel':('linear', 'rbf'), 'C':[1, 10]}
+parameters = {
+    'D':[2, 4], 
+    'g':[0.1, 1],
+    'Lambda':[0, 1e-4]
+    }
 
 # define classifier
 NPNN = npnn(tfpr=0.1)
-clf = GridSearchCV(NPNN, parameters)
+
+# hyperparameter tuning
+clf = GridSearchCV(NPNN, parameters, verbose=3, cv=2, n_jobs=-1)
 
 # training
 clf.fit(X_train, y_train)
 
+# print best params
+print(clf.best_params_)
+
+# get best estimator
+best_NPNN = clf.best_estimator_
+
 # prediction
-y_pred = NPNN.predict(X_test)
+y_pred = best_NPNN.predict(X_test)
 
 # evaluation
 tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
@@ -43,18 +55,18 @@ print("NPNN, TPR: {:.3f}, FPR: {:.3f}".format(TPR, FPR))
 
 # plot transient performances
 f,ax = plt.subplots(3,1,figsize=(8,12))
-ax[0].plot(NPNN.tpr_train_array_, label="TPR")
+ax[0].plot(best_NPNN.tpr_train_array_, label="TPR")
 ax[0].set_xlabel("Number of Samples")
 ax[0].set_ylabel("TPR")
 ax[0].grid()
 ax[0].legend()
-ax[1].plot(NPNN.fpr_train_array_, label="FPR")
+ax[1].plot(best_NPNN.fpr_train_array_, label="FPR")
 ax[1].set_xlabel("Number of Samples")
 ax[1].set_ylabel("FPR")
 ax[1].grid()
 ax[1].legend()
-ax[2].plot(NPNN.neg_class_weight_train_array_, label="Negative Class weight")
-ax[2].plot(NPNN.pos_class_weight_train_array_, label="Positive Class weight")
+ax[2].plot(best_NPNN.neg_class_weight_train_array_, label="Negative Class weight")
+ax[2].plot(best_NPNN.pos_class_weight_train_array_, label="Positive Class weight")
 ax[2].set_xlabel("Number of Samples")
 ax[2].set_ylabel("Class Respective Weights")
 ax[2].grid()
@@ -68,7 +80,7 @@ y_min, y_max = X_test[:, 1].min() - 1, X_test[:, 1].max() + 1
 xx, yy = np.meshgrid(np.linspace(x_min, x_max, 100),
                      np.linspace(y_min, y_max, 100))
 X_mesh = np.c_[xx.ravel(), yy.ravel()]
-Z = NPNN.predict(X_mesh)
+Z = best_NPNN.predict(X_mesh)
 Z = Z.reshape(xx.shape)
 pos_class_indices = (y_test == 1)
 neg_class_indices = (y_test == -1)
@@ -82,5 +94,5 @@ ax.legend()
 ax.grid()
 ax.set_ylabel("X_2")
 ax.set_xlabel("X_1")
-ax.set_title("TFPR:{:.3f}".format(NPNN.tfpr))
+ax.set_title("TFPR:{:.3f}".format(best_NPNN.tfpr))
 f.savefig('./figures/decision_boundary_visualized.png')
