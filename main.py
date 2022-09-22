@@ -1,5 +1,5 @@
 import pandas as pd
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import confusion_matrix
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
@@ -22,12 +22,15 @@ sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.transform (X_test)
 
-# classifier definition
-# Note that cross validation is not applied here, it will be implemented in the future versions
-NPNN = npnn(D_=15, g_=1, tfpr_=0.1)
+# define hyperparameters
+parameters = {'kernel':('linear', 'rbf'), 'C':[1, 10]}
+
+# define classifier
+NPNN = npnn(tfpr=0.1)
+clf = GridSearchCV(NPNN, parameters)
 
 # training
-NPNN.fit(X_train, y_train)
+clf.fit(X_train, y_train)
 
 # prediction
 y_pred = NPNN.predict(X_test)
