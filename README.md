@@ -16,8 +16,6 @@ Proposed model is an online, nonlinear NP classifier. In NP framework, the targe
     from sklearn.model_selection import train_test_split, GridSearchCV
     from sklearn.metrics import confusion_matrix
     from sklearn.preprocessing import StandardScaler
-    import matplotlib.pyplot as plt
-    import numpy as np
 
     from npnn import npnn
 
