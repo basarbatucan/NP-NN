@@ -1,6 +1,6 @@
 # A Neural Network Approach for Online Nonlinear Neyman-Pearson Classification
 This is the repository for Online Nonlinear Neyman Pearson (NP) Classifier described in [1]: https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9265182. <br/>
-Proposed model is an online, nonlinear NP classifier. In NP framework, the target is to maximize detection power while upper-bounding the false alarm.
+Proposed model is an online, nonlinear NP classifier. In NP framework, the target is to maximize detection power while upper-bounding the false alarm. Implemented model is compatible with sklearn's gridsearchcv function. It can be used for fine tuning. You can find example usage below. 
 
 # NPNN parameters
     tfpr_=0.1                # target false alarm
@@ -13,29 +13,63 @@ Proposed model is an online, nonlinear NP classifier. In NP framework, the targe
 
 # Example Usage
     import pandas as pd
-    from sklearn.model_selection import train_test_split
+    from sklearn.model_selection import train_test_split, GridSearchCV
     from sklearn.metrics import confusion_matrix
     from sklearn.preprocessing import StandardScaler
     import matplotlib.pyplot as plt
     import numpy as np
+
     from npnn import npnn
 
+    # Target False Alarm
+    # NP framework aims to maximize the detection power while upper bounding the false alarm rate
+    # target false alarm rate should be determined by the user
+    target_FPR = 0.1
+
+    # main 
+    # np-nn works for 1,-1 classification
+    # we expect data to be in tabular form with the latest column as target (check ./data/banana.csv)
     data = pd.read_csv('./data/banana.csv')
     X = data.iloc[:,:-1].values
     y = data.iloc[:,-1].values
-    
+
+    # train test split
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
-    
+
+    # normalization
     sc = StandardScaler()
     X_train = sc.fit_transform(X_train)
     X_test = sc.transform (X_test)
-    
-    NPNN = npnn(D_=15, g_=1, tfpr_=0.1)
-    
-    NPNN.fit(X_train, y_train) # Augmentation sample number is an input parameter in fit function. Default value = 150e3
-    
-    y_pred = NPNN.predict(X_test)
-    
+
+    # define hyperparameters
+    parameters = {
+        'eta_init': [0.01],               # default, 0.01
+        'beta_init': [100],               # default, 100
+        'sigmoid_h': [-1, -2],            # default, -1
+        'Lambda':[0, 1e-4],               # default, 0
+        'D':[2, 4],                       # default, 2
+        'g':[0.1, 1]                      # default, 1
+        }
+
+    # define classifier
+    NPNN = npnn(tfpr=target_FPR)
+
+    # hyperparameter tuning
+    clf = GridSearchCV(NPNN, parameters, verbose=3, cv=2, n_jobs=-1)
+
+    # training
+    clf.fit(X_train, y_train)
+
+    # print best params
+    print(clf.best_params_)
+
+    # get best estimator
+    best_NPNN = clf.best_estimator_
+
+    # prediction
+    y_pred = best_NPNN.predict(X_test)
+
+    # evaluation
     tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
     FPR = fp/(fp+tn)
     TPR = tp/(tp+fn)
