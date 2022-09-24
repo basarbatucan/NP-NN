@@ -177,6 +177,7 @@ class npnn:
                     pos_class_weight_train_array[i] = pos_class_weight_train_array[i-1]
 
             # update w and b
+            w_prev = w
             w = (1-eta*Lambda)*w-eta*mu*dloss_dw
             b = b-eta*mu*dloss_db[0,0] # added [0,0] to have 1D bias
 
@@ -199,6 +200,13 @@ class npnn:
 
             # update uzawa gain
             beta = beta_init/(1+Lambda*(transient_number_of_positive_samples + transient_number_of_negative_samples))
+
+            # print weight convergence
+            if np.mod(i, 100) == 0:
+                w_change_norm = np.linalg.norm(w_prev-w)
+                w_norm = np.linalg.norm(w)
+                diff_perc = abs(w_change_norm)/w_norm*100
+                print("{:.4f}%".format(diff_perc))
 
         # save updated parameters
         self.w_ = w
