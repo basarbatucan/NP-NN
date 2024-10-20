@@ -12,7 +12,7 @@ from sklearn.metrics import confusion_matrix
 
 class npnn:
 
-    def __init__(self, tfpr=0.1, eta_init=0.01, beta_init=100, sigmoid_h=-1, Lambda=0, D=2, g=0.1):
+    def __init__(self, tfpr=0.9, eta_init=0.01, beta_init=100, sigmoid_h=-1, Lambda=0, D=2, g=0.1):
 
         # hyperparameters
         self.tfpr = tfpr

@@ -1,5 +1,5 @@
 # A Neural Network Approach for Online Nonlinear Neyman-Pearson Classification
-This is the repository for Online Nonlinear Neyman Pearson (NP) Classifier described in [1]: https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9265182. <br/>
+This is the repository for Online Nonlinear Neyman Pearson (NP) Classifier. <br/>
 Proposed model is an online, nonlinear NP classifier. In NP framework, the target is to maximize detection power while upper-bounding the false alarm. Implemented model is compatible with sklearn's gridsearchcv function. It can be used for fine tuning. You can find example usage below. 
 
 # NPNN parameters
@@ -84,6 +84,3 @@ Visualization of decision boundaries for 2D dataset.<br/>
 
 Thanks!<br/>
 Basarbatu Can, PhD
-
-# References
-[1] Can, Basarbatu, and Huseyin Ozkan. "A Neural Network Approach for Online Nonlinear Neyman-Pearson Classification." IEEE Access 8 (2020): 210234-210250.

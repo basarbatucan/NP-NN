@@ -10,12 +10,12 @@ from npnn import npnn
 # Target False Alarm
 # NP framework aims to maximize the detection power while upper bounding the false alarm rate
 # target false alarm rate should be determined by the user
-target_FPR = 0.1
+target_FPR = 0.9
 
 # main 
 # np-nn works for 1,-1 classification
 # we expect data to be in tabular form with the latest column as target (check ./data/banana.csv)
-data = pd.read_csv('./data/banana.csv')
+data = pd.read_csv('./data/tmp.csv')
 X = data.iloc[:,:-1].values
 y = data.iloc[:,-1].values
 
@@ -31,10 +31,10 @@ X_test = sc.transform (X_test)
 parameters = {
     'eta_init': [0.01],               # default, 0.01
     'beta_init': [100],               # default, 100
-    'sigmoid_h': [-1, -2],            # default, -1
-    'Lambda':[0, 1e-4],               # default, 0
-    'D':[2, 4],                       # default, 2
-    'g':[0.1, 1]                      # default, 1
+    'sigmoid_h': [-1],            # default, -1
+    'Lambda':[0],               # default, 0
+    'D':[2],                       # default, 2
+    'g':[0.1]                      # default, 1
     }
 
 # define classifier
